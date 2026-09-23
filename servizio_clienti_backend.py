@@ -14,6 +14,7 @@ def health(): return {'ok': True, 'mode': 'protected-readonly'}
 
 @app.get('/auth/google')
 def auth_google():
+    request.environ['wsgi.url_scheme'] = 'https'
     flow = Flow.from_client_secrets_file(CLIENT_FILE, scopes=SCOPES, redirect_uri=request.url_root.rstrip('/') + '/oauth2/callback')
     url, state = flow.authorization_url(access_type='offline', include_granted_scopes='true', prompt='consent')
     session['state'] = state
